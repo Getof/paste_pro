@@ -20,6 +20,8 @@ class CreatePasteTable extends Migration
             $table->string('sintax', 50);
             $table->integer('expir');
             $table->boolean('expose');
+            $table->string('hash');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }
