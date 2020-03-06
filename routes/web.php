@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+
+Route::get('/', ['uses' =>'PasteController@index', 'as' => 'home']);
+
+Route::get('/show/{hash}', ['uses' =>'PasteController@show'])->name('show');
+
+Route::post('/add', ['uses' =>'PasteController@store']);

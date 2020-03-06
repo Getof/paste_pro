@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Paste;
+namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Paste;
 use Illuminate\Http\Request;
+use Hashids\Hashids;
 
 class PasteController extends Controller
 {
@@ -15,7 +17,7 @@ class PasteController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.index');
     }
 
     /**
@@ -36,7 +38,22 @@ class PasteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $input = $request->all();
+
+        $paste = new Paste;
+        $paste->title = $input['title'];
+        $paste->paste = $input['paste_text'];
+        $paste->sintax = $input['sintax'];
+        $paste->expir = $input['expir'];
+        $paste->expose = $input['expose'];
+        $hashids = new Hashids($input['paste_text']);
+        $paste->hash = $hashids->encode(1,2,3);
+
+        dd($paste);
+
+
+        return redirect()->route('show', ['hash' => 'dfdfdf']);
     }
 
     /**
