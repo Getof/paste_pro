@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Paste;
+use DateTime;
 use Illuminate\Http\Request;
 use Hashids\Hashids;
+use Seld\PharUtils\Timestamps;
 
 class PasteController extends Controller
 {
@@ -40,20 +42,25 @@ class PasteController extends Controller
     {
 
         $input = $request->all();
+        // dd($input);
 
         $paste = new Paste;
-        $paste->title = $input['title'];
-        $paste->paste = $input['paste_text'];
+        if ($input['title'] = null) { $paste->title='Untitled';} else {$paste->title = $input['title'];}
+        if ($input['paste_text'] = null) {return redirect('/');} else {$paste->paste = $input['paste_text'];}
         $paste->sintax = $input['sintax'];
         $paste->expir = $input['expir'];
         $paste->expose = $input['expose'];
-        $hashids = new Hashids($input['paste_text']);
-        $paste->hash = $hashids->encode(1,2,3);
+        $date = new DateTime();
+        $paste->hash = substr(md5($date->format('H m d')), 1, 8);
 
-        dd($paste);
+         dd($paste);
+
+        if ($paste->save()) {
+            return redirect()->route('show', ['hash' => $paste->hash]);
+        }
 
 
-        return redirect()->route('show', ['hash' => 'dfdfdf']);
+
     }
 
     /**
